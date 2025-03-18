@@ -1,0 +1,27 @@
+/* Estilo para la barra de navegación */
+.navbar {
+    padding: 15px;
+}
+
+/* Estilo para el dashboard */
+.container {
+    max-width: 900px;
+}
+
+/* Estilo para las tarjetas */
+.card {
+    border-radius: 10px;
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Botones estilizados */
+.btn-outline-danger, .btn-outline-success {
+    width: 180px;
+}
+
+/* Pie de página */
+footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleLogin.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body class="bg-light">
+
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="card shadow-lg p-4" style="width: 400px;">
+            
+            <!-- Logo del colegio -->
+            <div class="text-center">
+                <img src="{{ url_for('static', filename='images/loyola.png') }}" alt="Escudo Colegio" class="img-fluid mb-3" style="max-width: 100px;">
+                <h4 class="text-primary">Sistema de Control de Asistencia</h4>
+            </div>
+
+            <!-- Mensajes Flash -->
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} text-center">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- Formulario de Inicio de Sesión -->
+            <form action="{{ url_for('login') }}" method="POST">
+                <div class="mb-3">
+                    <label for="correo" class="form-label">Correo:</label>
+                    <input type="email" id="correo" name="correo" class="form-control" placeholder="Ingrese su correo" required>
+                </div>
+                <div class="mb-3">
+                    <label for="contrasena" class="form-label">Contraseña:</label>
+                    <!--<input type="password" id="contrasena" name="contrasena" class="form-control" placeholder="Ingrese su contraseña" required>-->
+                    <input type="password" id="contrasena" name="contrasena" class="form-control" placeholder="Ingrese su contraseña" required>
+                    <div>
+                    <br>
+                    <center>
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                        Mostrar contraseña
+                    </button></center>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+            </form>
+
+            <div class="text-center mt-3">
+                <small><a href="#">¿Olvidó su contraseña?</a></small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pie de Página -->
+    <footer class="text-center text-muted mt-3">
+        <p>&copy; 2025 Sistema de Control de Asistencia</p>
+    </footer>
+    <script>
+        document.getElementById("togglePassword").addEventListener("click", function() {
+            let passwordInput = document.getElementById("contrasena");
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+            } else {
+                passwordInput.type = "password";
+            }
+        });
+    </script>
+</body>
+</html>

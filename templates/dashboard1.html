@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <title>Dashboard - Sistema de Control de Asistencia</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+<body>
+    <header>
+        <div class="user-info">
+            <p>Bienvenido, {{ user }}</p>
+        </div>
+        <h1>Dashboard</h1>
+        <nav>
+            <ul class="menu">
+                <li><a href="/agregar_estudiante">Agregar Estudiante</a></li>
+                <li><a href="/listar_usuarios">Listar Usuarios</a></li>
+                <li><a href="/agregar_usuario">Agregar Usuario</a></li>
+                <li><a href="/registro_asistencia">Registro de Asistencia</a></li>
+                <li><a href="/reportes">Reportes de asistencia</a></li>
+                <li><a href="/ConfigurarCamara RSTP">RTSP Camera</a></li>
+                <li><a href="/reporte_estudiante">Reporte de Asistencia de un estudiante</a></li>
+                <li><a href="/exportar-excel">Exportar a Excel3</a></li>
+                <li><a href="/exportar-pdf1" target="_blank">Descargar PDF</a></li> 
+
+            </ul>
+        </nav>
+    </header>
+ 
+    
+
+    <footer>
+        <p>&copy; 2024 Sistema de Control de Asistencia</p>
+    </footer>
+</body>
+</html>

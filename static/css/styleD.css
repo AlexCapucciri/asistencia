@@ -1,0 +1,37 @@
+/* Estilo para la barra de navegación */
+.navbar {
+    padding: 15px;
+}
+
+/* Estilo para el dashboard */
+.container {
+    max-width: 1200px;
+}
+
+/* Estilos para la tarjeta del menú */
+.menu-card {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+}
+
+.menu-card .list-group-item {
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.menu-card .list-group-item:hover {
+    background-color: #e9ecef;
+}
+
+/* Estilos generales */
+.card {
+    border-radius: 10px;
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}

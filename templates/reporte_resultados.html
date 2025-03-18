@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Reporte de Asistencia</title>
+</head>
+<body class="p-4">
+    <h2>Reporte de Asistencia</h2>
+    
+    {% if error %}
+        <div class="alert alert-warning">{{ error }}</div>
+    {% endif %}
+    
+    {% if registros %}
+    <table id="asistenciaTable" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID Registro</th>
+                <th>Estudiante</th>
+                <th>Curso</th>
+                <th>Materia</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registro in registros %}
+            <tr>
+                <td>{{ registro.id_registro }}</td>
+                <td>{{ registro.nombre }}</td>
+                <td>{{ registro.nombre_curso }}</td>
+                <td>{{ registro.nombre_materia }}</td>
+                <td>{{ registro.fecha }}</td>
+                <td>{{ registro.hora }}</td>
+            <!--<td>{{ registro.estado }}</td>-->
+                <td contenteditable="true" class="editable" data-id="{{ registro.id_registro }}">{{ registro.estado }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    <!-- Botones para descargar en PDF y Excel -->
+<a id="descargarPDF" href="#">
+    <button class="btn btn-danger">Descargar PDF</button>
+</a>
+
+<a id="descargarExcel" href="#">
+    <button class="btn btn-danger">Descargar Excel</button>
+</a>
+<script>
+    $(document).ready(function() {
+        $('#asistenciaTable').DataTable();
+
+        $('.editable').on('blur', function() {
+            let id = $(this).data('id');
+            let nuevoEstado = $(this).text();
+
+            $.ajax({
+                url: '/actualizar_estado_asistencia',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ id_registro: id, estado: nuevoEstado }),
+                success: function(response) {
+                    console.log('Estado actualizado correctamente');
+                },
+                error: function(error) {
+                    console.error('Error al actualizar estado', error);
+                }
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        let materiaId = "{{ materia_id }}";
+        let cursoId = "{{ curso_id }}";
+        let fechaInicio = "{{ fecha_inicio }}";
+        let fechaFin = "{{ fecha_fin }}";
+
+        let urlPDF = `/descargar_pdf1?materia_id=${materiaId}&curso_id=${cursoId}&fecha_inicio=${fechaInicio}&fecha_fin=${fechaFin}`;
+        $("#descargarPDF").attr("href", urlPDF);
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        let materiaId = "{{ materia_id }}";
+        let cursoId = "{{ curso_id }}";
+        let fechaInicio = "{{ fecha_inicio }}";
+        let fechaFin = "{{ fecha_fin }}";
+
+        // URL corregida para descargar el Excel
+        let urlExcel = `/descargar_excel1?materia_id=${materiaId}&curso_id=${cursoId}&fecha_inicio=${fechaInicio}&fecha_fin=${fechaFin}`;
+        
+        // Asignar la URL al enlace de descarga
+        $("#descargarExcel").attr("href", urlExcel);
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleReporte.css') }}">
+    <title>Reporte por Estudiante</title>
+</head>
+<body>
+    <h1>Reporte de Asistencia por Estudiante</h1>
+    <form method="POST" action="/reporte_estudiante">
+        <label for="nombre_estudiante">Nombre del Estudiante:</label>
+        <input type="text" id="nombre_estudiante" name="nombre_estudiante" placeholder="Ingrese el nombre o apellido" required>
+        
+        <label for="fecha_inicio">Fecha Inicio:</label>
+        <input type="date" id="fecha_inicio" name="fecha_inicio" required>
+        
+        <label for="fecha_fin">Fecha Fin:</label>
+        <input type="date" id="fecha_fin" name="fecha_fin" required>
+        
+        <button type="submit">Buscar</button>
+    </form>
+</body>
+</html>

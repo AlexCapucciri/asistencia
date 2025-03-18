@@ -1,0 +1,104 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background: linear-gradient(to right, #f8f9fa, #e9ecef);
+    color: #343a40;
+    padding: 0 20px;
+}
+
+/* Estilo del encabezado */
+header {
+    text-align: center;
+    background-color: #343a40;
+    color: #fff;
+    padding: 20px 0;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    font-size: 2.5em;
+    font-weight: bold;
+}
+
+/* Sección principal */
+main {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+/* Secciones y formularios */
+section h2 {
+    font-size: 1.8em;
+    margin-bottom: 15px;
+    color: #495057;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 1em;
+    margin-bottom: 5px;
+    color: #495057;
+}
+
+select, button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    font-size: 1em;
+    font-family: inherit;
+    background-color: #f8f9fa;
+    transition: background-color 0.3s, border 0.3s;
+}
+
+select:focus, button:focus {
+    outline: none;
+    border: 1px solid #007bff;
+    background-color: #e9ecef;
+}
+
+button {
+    background: #007bff;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+/* Pie de página */
+footer {
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 20px;
+    color: #868e96;
+    font-size: 0.9em;
+}
+
+/* Estilo responsivo */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2em;
+    }
+
+    section h2 {
+        font-size: 1.5em;
+    }
+}

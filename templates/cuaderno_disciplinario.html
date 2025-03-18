@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Cuaderno Disciplinario</title>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Sistema de Control de Asistencia</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('logout') }}" class="btn btn-danger">Cerrar Sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">Cuaderno Disciplinario</h2>
+
+        <!-- Formulario de búsqueda -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Buscar Estudiante</h5>
+                <form id="searchForm">
+                    <div class="mb-3">
+                        <label for="studentSearch" class="form-label">Nombre del Estudiante:</label>
+                        <input type="text" id="studentSearch" class="form-control" placeholder="Ingrese nombre o ID">
+                        <div id="searchResults" class="list-group mt-2"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Formulario de Registro -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">Registrar Incidencia</h5>
+                <form id="disciplinaryForm">
+                    <input type="hidden" id="student_id">
+                    
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Materia:</label>
+                        <select id="subject" class="form-control" required>
+                            <option value="">Seleccione una materia</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Descripción:</label>
+                        <select id="description" class="form-control" required>
+                            <option value="Indisciplina">Indisciplina</option>
+                            <option value="Uso de celular sin permiso">Uso de celular sin permiso</option>
+                            <option value="Falta de respeto">Falta de respeto</option>
+                            <option value="Salir del aula sin permiso">Salir del aula sin permiso</option>    
+                            <option value="No traer material de trabajo">No traer material de trabajo</option>    
+                            <option value="Daño de material en el aula">Daño de material en el aula</option>    
+                            <option value="Comer en clase">Comer en clase</option> 
+                            <option value="Llegar tarde sin justificacion">Llegar tarde sin justificación</option> 
+                            <option value="Usar lenguaje inapropiado">Usar lenguaje inapropiado</option> 
+
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Guardar Registro</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Historial del estudiante -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">Historial de Incidencias</h5>
+                <ul id="historyList" class="list-group"></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Historial del estudiante -->
+<div class="card mt-4">
+    <div class="card-body">
+        <h5 class="card-title">Historial de Incidencias</h5>
+        <table id="historyTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Materia</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las filas se llenarán dinámicamente con JavaScript -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+    <script>
+        // Función de búsqueda de estudiantes
+        document.getElementById("studentSearch").addEventListener("input", function () {
+            let query = this.value;
+            if (query.length > 2) {
+                fetch(`/buscar_estudiante?q=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let results = document.getElementById("searchResults");
+                        results.innerHTML = "";
+                        data.forEach(estudiante => {
+                            let item = document.createElement("a");
+                            item.href = "#";
+                            item.className = "list-group-item list-group-item-action";
+                            item.textContent = `${estudiante.nombre} - ${estudiante.curso}`;
+                            item.onclick = () => seleccionarEstudiante(estudiante);
+                            results.appendChild(item);
+                        });
+                    });
+            }
+        });
+
+        function seleccionarEstudiante(estudiante) {
+            document.getElementById("student_id").value = estudiante.id_estudiante;
+            fetch(`/obtener_materias_por_estudiante/${estudiante.id_estudiante}`)
+                .then(response => response.json())
+                .then(materias => {
+                    let select = document.getElementById("subject");
+                    select.innerHTML = '<option value="">Seleccione una materia</option>';
+                    materias.forEach(materia => {
+                        let option = document.createElement("option");
+                        option.value = materia.id_materia;
+                        option.textContent = materia.nombre_materia;
+                        select.appendChild(option);
+                    });
+                });
+            cargarHistorial(estudiante.id_estudiante);
+        }
+
+        
+function cargarHistorial(id) {
+    fetch(`/historial_incidencias/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            let tableBody = document.querySelector("#historyTable tbody");
+            tableBody.innerHTML = ""; // Limpiar la tabla antes de agregar nuevos datos
+
+            data.forEach(incidencia => {
+                let row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${new Date(incidencia.fecha).toLocaleDateString()}</td>
+                    <td>${incidencia.materia}</td>
+                    <td>${incidencia.descripcion}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error("Error al cargar el historial:", error));
+}
+
+        document.getElementById("disciplinaryForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            let student_id = document.getElementById("student_id").value;
+            let description = document.getElementById("description").value;
+            let subject = document.getElementById("subject").value;
+
+            if (!student_id || !description || !subject) {
+                alert("Por favor, complete todos los campos.");
+                return;
+            }
+
+            fetch("/guardar_incidencia", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ student_id, description, subject })
+            }).then(response => response.json())
+              .then(data => { alert(data.message); cargarHistorial(student_id); });
+        });
+    </script>
+    
+</body>
+</html>

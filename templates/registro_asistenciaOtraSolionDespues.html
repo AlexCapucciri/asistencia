@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Asistencia</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style1.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Registro de Asistencia</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Seleccione Curso y Materia</h2>
+            <form action="/control_asistencia" method="post">
+                <!-- Listbox para elegir curso -->
+                <div class="form-group">
+                    <label for="curso">Elija Curso:</label>
+                    <select id="curso" name="curso" required>
+                        <option value="">Seleccione un curso</option>
+                        {% for curso in cursos %}
+                        <option value="{{ curso.id_curso }}">{{ curso.nombre_curso }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Listbox para elegir materia -->
+                <div class="form-group">
+                    <label for="materia">Elija Materia:</label>
+                    <select id="materia" name="materia" required>
+                        <option value="">Seleccione una materia</option>
+                        {% for materia in materias %}
+                        <option value="{{ materia.id_materia }}" data-curso="{{ materia.id_curso }}">{{ materia.nombre_materia }}</option>
+                        {% endfor %}
+                    </select>    
+                </div>
+
+                <!-- Botón para realizar control de asistencia -->
+                <div class="form-group">
+                    <button type="submit">Realizar Control de Asistencia</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Sistema de Control de Asistencia</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const selectCurso = document.getElementById("curso");
+            const selectMateria = document.getElementById("materia");
+            const materias = Array.from(selectMateria.options).slice(1); // Guardamos todas las materias excepto la opción "Seleccione una materia"
+
+            selectCurso.addEventListener("change", function() {
+                const cursoSeleccionado = selectCurso.value;
+                
+                // Limpiar el select de materias excepto la opción por defecto
+                selectMateria.innerHTML = '<option value="">Seleccione una materia</option>';
+                
+                // Filtrar y agregar solo las materias que pertenecen al curso seleccionado
+                materias.forEach(materia => {
+                    if (materia.dataset.curso === cursoSeleccionado) {
+                        selectMateria.appendChild(materia);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

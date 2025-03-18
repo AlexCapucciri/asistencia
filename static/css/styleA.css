@@ -1,0 +1,27 @@
+/* Estilo para la barra de navegación */
+.navbar {
+    padding: 15px;
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 800px;
+}
+
+/* Tarjetas */
+.card {
+    border-radius: 10px;
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Botones */
+.btn {
+    border-radius: 5px;
+}
+
+/* Pie de página */
+footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}

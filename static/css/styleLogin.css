@@ -1,0 +1,23 @@
+/* Estilo para centrar el formulario */
+.container {
+    height: 100vh;
+}
+
+/* Tarjeta de login */
+.card {
+    border-radius: 10px;
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Botón */
+.btn-primary {
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Pie de página */
+footer {
+    position: fixed;
+    bottom: 10px;
+    width: 100%;
+}

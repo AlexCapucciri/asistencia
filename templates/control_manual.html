@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Asistencia Manual</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleF.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+
+    <div class="container mt-4">
+        <div class="card shadow p-4">
+            <h1 class="text-center text-primary">Control de Asistencia</h1>
+            <p class="text-center"><strong>Curso:</strong> {{ curso }}</p>
+            <p class="text-center"><strong>Materia:</strong> {{ materia }}</p>
+
+            <!-- Botones de Seleccionar/Deseleccionar -->
+            <div class="d-flex justify-content-center my-3">
+                <button class="btn btn-success me-2" id="seleccionarTodos">Seleccionar Todos</button>
+                <button class="btn btn-warning" id="deseleccionarTodos">Deseleccionar Todos</button>
+            </div>
+
+            <!-- Tabla de Estudiantes -->
+            <div class="table-responsive mt-4">
+                <h3 class="text-center text-secondary">Lista de Estudiantes</h3>
+                <table class="table table-striped table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Asistencia</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for estudiante in estudiantes %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <!--<td>{{ estudiante.nombre }}</td>-->
+                            <td class="text-start">{{ estudiante.nombre }}</td>
+                            <td>
+                                <input type="checkbox" class="form-check-input estudiante-checkbox" value="{{ estudiante.id_estudiante }}">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="d-flex justify-content-center mt-3">
+               <!--<button class="btn btn-primary me-2" id="guardarAsistencia"
+                        data-materia-id="{{ materia_id }}" data-curso-id="{{ curso_id }}">
+                    Guardar Asistencia
+                </button>-->
+                <button class="btn btn-primary me-2" id="guardarAsistencia"
+                    data-materia-id="{{ id_materia }}" data-curso-id="{{ id_curso }}">
+                Guardar Asistencia
+                </button>
+
+                <button class="btn btn-danger" id="cancelar">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center mt-4 text-muted">
+        <p>&copy; 2025 Sistema de Control de Asistencia</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("DOM cargado correctamente.");
+
+            // Seleccionar todos
+            document.getElementById("seleccionarTodos").addEventListener("click", function() {
+                console.log("Botón Seleccionar Todos presionado");
+                document.querySelectorAll('.estudiante-checkbox').forEach(checkbox => checkbox.checked = true);
+            });
+
+            // Deseleccionar todos
+            document.getElementById("deseleccionarTodos").addEventListener("click", function() {
+                console.log("Botón Deseleccionar Todos presionado");
+                document.querySelectorAll('.estudiante-checkbox').forEach(checkbox => checkbox.checked = false);
+            });
+
+            // Guardar asistencia
+            document.getElementById("guardarAsistencia").addEventListener("click", function() {
+                let estudiantesSeleccionados = [];
+                document.querySelectorAll('.estudiante-checkbox:checked').forEach(checkbox => {
+                    estudiantesSeleccionados.push(parseInt(checkbox.value)); // Convertir ID a número
+                });
+
+                if (estudiantesSeleccionados.length === 0) {
+                    alert("Debe seleccionar al menos un estudiante.");
+                    return;
+                }
+
+                // Obtener valores desde los atributos del botón
+                let idMateria = parseInt(this.getAttribute("data-materia-id")) || 0;
+                let idCurso = parseInt(this.getAttribute("data-curso-id")) || 0;
+                
+                console.log("Enviando datos:", { estudiantes: estudiantesSeleccionados, id_materia: idMateria, id_curso: idCurso });
+
+                fetch("/guardar_asistencia_manual", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        estudiantes: estudiantesSeleccionados,
+                        id_materia: idMateria,
+                        id_curso: idCurso
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.mensaje);
+                    if (data.success || data.redirect) {
+                        window.location.href = data.redirect; // Redirigir si la respuesta contiene la URL
+                }
+            })
+                .catch(error => console.error("Error:", error));
+            });
+
+            // Cancelar acción
+            document.getElementById("cancelar").addEventListener("click", function() {
+                window.location.href = "/dashboard_docente";
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let guardarBtn = document.getElementById("guardarAsistencia");
+            let idMateria = guardarBtn.getAttribute("data-materia-id");
+            let idCurso = guardarBtn.getAttribute("data-curso-id");
+    
+            console.log("Valores obtenidos:", { idMateria, idCurso });
+    
+            if (!idMateria || !idCurso) {
+                console.error("Error: materia_id o curso_id no están definidos en el HTML.");
+            }
+        });
+    </script>
+
+</body>
+</html>

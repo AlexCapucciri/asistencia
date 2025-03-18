@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Asistencia</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Enlace al archivo CSS externo -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleR.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+
+    <div class="container mt-5">
+        <div class="card bg-white">
+            <h1 class="mb-4"><i class="bi bi-person-check"></i> Registro de Asistencia</h1>
+
+            <form action="/control_asistencia_m" method="post">
+                <div class="mb-3">
+                    <label for="curso" class="form-label">Elija Curso:</label>
+                    <select id="curso" name="curso" class="form-select" required>
+                        <option value="">Seleccione un curso</option>
+                        {% for curso in cursos %}
+                        <option value="{{ curso.id_curso }}">{{ curso.nombre_curso }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="materia" class="form-label">Elija Materia:</label>
+                    <select id="materia" name="materia" class="form-select" required>
+                        <option value="">Seleccione una materia</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-custom">Realizar Control de Asistencia</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Sistema de Control de Asistencia</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const selectCurso = document.getElementById("curso");
+            const selectMateria = document.getElementById("materia");
+
+            selectCurso.addEventListener("change", function() {
+                const cursoSeleccionado = selectCurso.value;
+                selectMateria.innerHTML = '<option value="">Seleccione una materia</option>';
+
+                if (cursoSeleccionado) {
+                    fetch(`/obtener_materias/${cursoSeleccionado}`)
+                        .then(response => response.json())
+                        .then(materias => {
+                            materias.forEach(materia => {
+                                const option = document.createElement("option");
+                                option.value = materia.id_materia;
+                                option.textContent = materia.nombre_materia;
+                                selectMateria.appendChild(option);
+                            });
+                        })
+                        .catch(error => console.error("Error al obtener materias:", error));
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <title>Sistema de Control de Asistencia</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1> Bienvenido al Sistema de Control de Asistencia</h1>
+    </header>
+
+    <main>
+        <section class="login-section">
+            <h2>Iniciar Sesión</h2>
+            <form action="/login" method="post">
+                <div class="form-group">
+                    <label for="username">Usuario:</label>
+                    <input type="text" id="username" name="username" placeholder="Ingrese su usuario" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit">Ingresar</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Sistema de Control de Asistencia</p>
+    </footer>
+</body>
+</html>
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Control de Asistencia</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Control de Asistencia por Reconocimiento Facial</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data" class="mt-4">
+            <div class="mb-3">
+                <label for="image" class="form-label">Sube una imagen para el reconocimiento</label>
+                <input type="file" name="image" id="image" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Subir y procesar</button>
+        </form>
+        <hr>
+        <a href="/estudiantes" class="btn btn-secondary">Ver lista de estudiantes</a>
+    </div>
+</body>
+</html>
+!-->
+
+
+</html>

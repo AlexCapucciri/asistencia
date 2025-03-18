@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Docente</title>
+</head>
+<body>
+    <h1>Bienvenido al Dashboard de Docentes</h1>
+    
+    {% if reportes %}
+        <h2>Reporte de Asistencia de Estudiantes</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Estudiante</th>
+                    <th>Materia</th>
+                    <th>Fecha de Asistencia</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reporte in reportes %}
+                    <tr>
+                        <td>{{ reporte.nombres }} {{ reporte.apellidos }}</td>
+                        <td>{{ reporte.materia }}</td>
+                        <td>{{ reporte.fecha_asistencia }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay reportes disponibles.</p>
+    {% endif %}
+
+    <a href="{{ url_for('logout') }}">Cerrar Sesión</a>
+</body>
+</html>
